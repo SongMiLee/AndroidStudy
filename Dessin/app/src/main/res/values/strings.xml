@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Dessin</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="title_activity_colorpalette">Colorpalette</string>
+    <string name="title_activity_brush_dialog">brushDialog</string>
+    <string name="title_activity_brush">Brush</string>
+</resources>
