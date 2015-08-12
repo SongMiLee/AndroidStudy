@@ -1,6 +1,8 @@
 package song.personal.dessin;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -19,6 +21,9 @@ public class DrawingView extends View {
     Paint mpaint;
     ArrayList<Point> pointList;
 
+    int mWidth=10;
+    int mColor=Color.BLACK;
+
     //생성자
    public DrawingView(Context context){
        super(context);
@@ -32,20 +37,46 @@ public class DrawingView extends View {
        mpaint.setStrokeWidth(10);
    }
 
+    //펜 굵기 다이얼로그 호출
+    public void callBrushDialog()
+    {
+        Log.d("Call Brush Dialog", "now call Brush Dialog");
+        BrushDialog.listener=new OnPenSelectedListener() {
+            @Override
+            public void onPenSelected(int pen) {
+                Log.d("size : ",pen+" ");
+                mpaint.setStrokeWidth(pen);
+            }
+        };
+
+        Intent intent=new Intent(getContext(),BrushDialog.class);
+        ((Activity)getContext()).startActivity(intent);
+    }
+
     //선의 색 변경
     public void setStroke(int color, int width)
     {
         mpaint.setColor(color);
         mpaint.setStrokeWidth(width);
+
+        mColor=color;
+        mWidth=width;
+
+        Log.i("color : "+color, "width : "+width);
     }
 
     //터치 이벤트 함수
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        //터치 액션을 받아온다.
         int action=event.getAction();
 
+        //현재 터치한 화면의 x,y 좌표 값을 받아온다.
         int curX=(int)event.getX();
         int curY=(int)event.getY();
+
+        if(mpaint.getStrokeWidth()!=mWidth)
+            mpaint.setStrokeWidth(mWidth);
 
         switch (action)
         {
