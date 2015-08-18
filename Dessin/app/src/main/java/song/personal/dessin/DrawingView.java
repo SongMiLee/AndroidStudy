@@ -37,32 +37,34 @@ public class DrawingView extends View {
        mpaint.setStrokeWidth(10);
    }
 
-    //펜 굵기 다이얼로그 호출
-    public void callBrushDialog()
-    {
-        Log.d("Call Brush Dialog", "now call Brush Dialog");
-        BrushDialog.listener=new OnPenSelectedListener() {
-            @Override
-            public void onPenSelected(int pen) {
-                Log.d("size : ",pen+" ");
-                mpaint.setStrokeWidth(pen);
-            }
-        };
+    //선의 색 반환하기
+    public int returnColor()    {        return mpaint.getColor();    }
 
-        Intent intent=new Intent(getContext(),BrushDialog.class);
-        ((Activity)getContext()).startActivity(intent);
-    }
-
-    //선의 색 변경
-    public void setStroke(int color, int width)
+    //선의 색 설정
+    public void setColor(int color)
     {
         mpaint.setColor(color);
-        mpaint.setStrokeWidth(width);
-
         mColor=color;
+        Log.i("DrawingView color : ", color+" "+mColor);
+    }
+
+    //선의 굵기 설정
+    public void setStroke(int width)
+    {
+        mpaint.setStrokeWidth(width);
         mWidth=width;
 
-        Log.i("color : "+color, "width : "+width);
+        Log.i( "width : ",width+"");
+    }
+
+    //지우개 설정
+    public void setErase()
+    {
+        mpaint.setColor(Color.WHITE);
+        mColor=Color.WHITE;
+
+        mpaint.setStrokeWidth(15);
+        mWidth=15;
     }
 
     //터치 이벤트 함수
@@ -75,8 +77,14 @@ public class DrawingView extends View {
         int curX=(int)event.getX();
         int curY=(int)event.getY();
 
+        //현재 설정된 선의 굵기와 색이 맞지 않으면 맞춰줌.
         if(mpaint.getStrokeWidth()!=mWidth)
             mpaint.setStrokeWidth(mWidth);
+
+        if(mpaint.getColor()!=mColor)
+            mpaint.setColor(mColor);
+
+        Log.i("Motion color "+mpaint.getColor(),"mColor : "+mColor);
 
         switch (action)
         {

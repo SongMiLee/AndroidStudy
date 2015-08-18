@@ -1,33 +1,23 @@
 package song.personal.dessin;
 
 import android.app.ActionBar;
-import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.Toast;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 public class Dessin extends AppCompatActivity {
 
     int width=10;
+    int color=Color.BLACK;
 
     //그림 그릴 뷰
     DrawingView drawingView;
-
-    BrushDialog Brush;
+    //색상 다이얼로그
+    ColorDialog colorDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +27,7 @@ public class Dessin extends AppCompatActivity {
         //그림 그릴 뷰를 가져온다.
         drawingView=new DrawingView(this);
         setContentView(drawingView);
+
 
         //스플래시 화면 실행
         startActivity(new Intent(this, SplashActivity.class));
@@ -75,9 +66,16 @@ public class Dessin extends AppCompatActivity {
             BrushDialog.listener=new OnPenSelectedListener() {
                 @Override
                 public void onPenSelected(int pen) {
+                    int color=drawingView.returnColor();
                     width=pen;
                     Log.i("pen Size : ", width+"");
-                    drawingView.setStroke(Color.BLUE, width);
+
+                    if(color==Color.WHITE) {
+                        drawingView.setColor(Color.BLACK);
+                        drawingView.setStroke(width);
+                    }
+                    else
+                        drawingView.setStroke(width);
                 }
             };
 
@@ -90,7 +88,7 @@ public class Dessin extends AppCompatActivity {
     private View.OnClickListener eraseListener=new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-            drawingView.setStroke(Color.WHITE, 15);
+            drawingView.setErase();
         }
     };
 
@@ -99,6 +97,16 @@ public class Dessin extends AppCompatActivity {
         @Override
         public void onClick(View v) {
 
+            ColorDialog.listener=new OnColorSelectedListener() {
+                @Override
+                public void onColorChanged(int pen) {
+                    color=pen;
+                    drawingView.setColor(color);
+                }
+            };
+
+            Intent i=new Intent(getApplicationContext(),ColorDialog.class);
+            startActivity(i);
         }
     };
 

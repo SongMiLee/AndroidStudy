@@ -7,4 +7,5 @@
     <string name="title_activity_colorpalette">Colorpalette</string>
     <string name="title_activity_brush_dialog">brushDialog</string>
     <string name="title_activity_brush">Brush</string>
+    <string name="title_activity_color_dialog">ColorDialog</string>
 </resources>

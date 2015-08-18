@@ -9,15 +9,12 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.*;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridView;
 
 public class BrushDialog extends Activity {
@@ -126,7 +123,7 @@ class PenAdapter extends BaseAdapter{
         Canvas penCanvas=new Canvas();
         penCanvas.setBitmap(penBitmap);
 
-        //붓으 바탕
+        //붓의 바탕
         Paint paint=new Paint();
         paint.setColor(Color.WHITE);
         penCanvas.drawRect(0, 0, areaWidth, areaHeight, paint);

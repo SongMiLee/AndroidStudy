@@ -36,6 +36,10 @@
             android:name=".BrushDialog"
             android:label="@string/title_activity_brush_dialog" >
         </activity>
+        <activity
+            android:name=".ColorDialog"
+            android:label="@string/title_activity_color_dialog" >
+        </activity>
     </application>
 
 </manifest>
