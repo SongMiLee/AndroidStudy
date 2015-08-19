@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.*;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
@@ -27,16 +26,9 @@ public class BrushDialog extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //다이얼로그 외부 화면 흐리게 표현
-        WindowManager.LayoutParams lpWindow=new WindowManager.LayoutParams();
-        lpWindow.flags=WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-        lpWindow.dimAmount=0.8f;
-        getWindow().setAttributes(lpWindow);
-
-        this.setTitle("Brush Stroke");
-
         setContentView(R.layout.activity_brush_dialog);
+
+        this.setTitle("선 굵기 선택");
 
         grid=(GridView)findViewById(R.id.colorGrid);
         okBtn=(Button)findViewById(R.id.closeBtn);

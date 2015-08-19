@@ -1,6 +1,6 @@
 package song.personal.dessin;
 
-import android.support.v7.app.AppCompatActivity;
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,7 +11,7 @@ import com.larswerkman.holocolorpicker.SVBar;
 import com.larswerkman.holocolorpicker.SaturationBar;
 import com.larswerkman.holocolorpicker.ValueBar;
 
-public class ColorDialog extends AppCompatActivity{
+public class ColorDialog extends Activity {
     ColorPicker picker;
     SVBar svBar;
     OpacityBar opacityBar;
@@ -25,6 +25,8 @@ public class ColorDialog extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_color_dialog);
+
+        this.setTitle("색상 선택");
 
         //레이아웃과 연결한다.
         picker = (ColorPicker) findViewById(R.id.picker);

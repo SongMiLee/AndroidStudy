@@ -1,14 +1,9 @@
 package song.personal.dessin;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -45,7 +40,6 @@ public class DrawingView extends View {
     {
         mpaint.setColor(color);
         mColor=color;
-        Log.i("DrawingView color : ", color+" "+mColor);
     }
 
     //선의 굵기 설정
@@ -53,8 +47,6 @@ public class DrawingView extends View {
     {
         mpaint.setStrokeWidth(width);
         mWidth=width;
-
-        Log.i( "width : ",width+"");
     }
 
     //지우개 설정
@@ -83,8 +75,6 @@ public class DrawingView extends View {
 
         if(mpaint.getColor()!=mColor)
             mpaint.setColor(mColor);
-
-        Log.i("Motion color "+mpaint.getColor(),"mColor : "+mColor);
 
         switch (action)
         {
