@@ -10,6 +10,11 @@ import android.view.View;
 import android.widget.ImageButton;
 
 public class Dessin extends AppCompatActivity {
+    //액션바 메뉴
+    ImageButton brushBtn;
+    ImageButton eraseBtn;
+    ImageButton toolBtn;
+    ImageButton colorBtn;
 
     //선의 기본 설정
     int width=10;
@@ -17,6 +22,8 @@ public class Dessin extends AppCompatActivity {
 
     //그림 그릴 뷰
     DrawingView drawingView;
+
+    static int erasecnt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +60,7 @@ public class Dessin extends AppCompatActivity {
             BrushDialog.listener=new OnPenSelectedListener() {
                 @Override
                 public void onPenSelected(int pen) {
-                    int color=drawingView.returnColor();
+                    int color=drawingView.getColor();
                     width=pen;
                     Log.i("pen Size : ", width+"");
 
@@ -75,7 +82,28 @@ public class Dessin extends AppCompatActivity {
     private View.OnClickListener eraseListener=new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-            drawingView.setErase();
+            erasecnt+=1;
+            if(erasecnt%2==1) {
+                //이전의 상태 저장
+                color=drawingView.getColor();
+                width=(int)drawingView.getStroke();
+
+                //지우개 적용
+                drawingView.setErase();
+
+                //색, 굵기 버튼 비활성화
+                brushBtn.setEnabled(false);
+                colorBtn.setEnabled(false);
+            }
+            else
+            {
+                drawingView.setColor(color);
+                drawingView.setStroke(width);
+
+                //색, 굵기 버튼 활성화
+                brushBtn.setEnabled(true);
+                colorBtn.setEnabled(true);
+            }
         }
     };
 
@@ -119,19 +147,19 @@ public class Dessin extends AppCompatActivity {
             getSupportActionBar().setCustomView(R.layout.activity_canvas);
 
             //1. 브러시 함수
-            ImageButton imgBtn=(ImageButton)findViewById(R.id.brushBtn);
-            imgBtn.setOnClickListener(brushListener);
+            brushBtn=(ImageButton)findViewById(R.id.brushBtn);
+            brushBtn.setOnClickListener(brushListener);
 
             //2. 지우개 함수
-            ImageButton eraseBtn=(ImageButton)findViewById(R.id.eraseBtn);
+            eraseBtn=(ImageButton)findViewById(R.id.eraseBtn);
             eraseBtn.setOnClickListener(eraseListener);
 
             //3.칼라
-            ImageButton colorBtn=(ImageButton)findViewById(R.id.colorBtn);
+            colorBtn=(ImageButton)findViewById(R.id.colorBtn);
             colorBtn.setOnClickListener(colorListener);
 
             //4.기타
-            ImageButton toolBtn=(ImageButton)findViewById(R.id.toolBtn);
+            toolBtn=(ImageButton)findViewById(R.id.toolBtn);
             toolBtn.setOnClickListener(toolListener);
         }
     }

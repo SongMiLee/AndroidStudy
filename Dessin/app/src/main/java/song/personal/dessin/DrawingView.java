@@ -33,7 +33,10 @@ public class DrawingView extends View {
    }
 
     //선의 색 반환하기
-    public int returnColor()    {        return mpaint.getColor();    }
+    public int getColor()    {        return mpaint.getColor();    }
+
+    //선의 굵기 반환하기
+    public float getStroke(){ return mpaint.getStrokeWidth(); }
 
     //선의 색 설정
     public void setColor(int color)

@@ -37,11 +37,6 @@
             android:label="@string/title_activity_color_dialog"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
-        <!--설정 다이얼로그-->
-        <activity
-            android:name=".SettingActivity"
-            android:label="@string/title_activity_setting" >
-        </activity>
     </application>
 
 </manifest>
