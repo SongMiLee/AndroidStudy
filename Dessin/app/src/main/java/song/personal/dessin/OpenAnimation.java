@@ -1,11 +1,11 @@
 package song.personal.dessin;
 
 import android.view.Gravity;
-import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 
 /**
  * Created by song on 2015-08-19.
@@ -39,9 +39,9 @@ public class OpenAnimation extends TranslateAnimation implements Animation.Anima
 
     @Override
     public void onAnimationEnd(Animation animation) {
-        LinearLayout.LayoutParams params=(LinearLayout.LayoutParams)mainLayout.getLayoutParams();
-        params.leftMargin=panelWidth;
-        params.gravity= Gravity.LEFT;
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) mainLayout.getLayoutParams();
+        params.leftMargin = panelWidth;
+        params.gravity = Gravity.LEFT;
         mainLayout.clearAnimation();
         mainLayout.setLayoutParams(params);
         mainLayout.requestLayout();

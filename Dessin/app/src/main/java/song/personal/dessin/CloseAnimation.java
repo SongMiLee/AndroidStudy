@@ -3,6 +3,7 @@ package song.personal.dessin;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 /**
@@ -29,7 +30,7 @@ public class CloseAnimation extends TranslateAnimation implements TranslateAnima
         setAnimationListener(this);
 
         // Clear left and right margins
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mainLayout.getLayoutParams();
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) mainLayout.getLayoutParams();
         params.rightMargin = 0;
         params.leftMargin = 0;
         mainLayout.setLayoutParams(params);

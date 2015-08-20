@@ -13,29 +13,34 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".Dessin"
-            android:label="@string/app_name"
-            android:configChanges="orientation|screenSize">
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--스플래시 액티비티-->
+        <!-- 스플래시 액티비티 -->
         <activity
             android:name=".SplashActivity"
             android:label="@string/title_activity_splash" >
         </activity>
-        <!--선 다이얼로그-->
+        <!-- 선 다이얼로그 -->
         <activity
             android:name=".BrushDialog"
             android:label="@string/title_activity_brush_dialog"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
-        <!--색상 다이얼로그-->
+        <!-- 색상 다이얼로그 -->
         <activity
             android:name=".ColorDialog"
             android:label="@string/title_activity_color_dialog"
             android:theme="@android:style/Theme.Dialog" >
+        </activity>
+        <activity
+            android:name=".SettingActivity"
+            android:label="@string/title_activity_setting" >
         </activity>
     </application>
 
