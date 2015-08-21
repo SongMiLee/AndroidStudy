@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -29,6 +30,7 @@ public class Dessin extends AppCompatActivity {
     int color=Color.BLACK;
 
     //그림 그릴 뷰
+    LinearLayout inflateView;
     DrawingView drawingView;
 
     //색, 선 버튼 비활성화를 위한 카운트
@@ -41,6 +43,8 @@ public class Dessin extends AppCompatActivity {
     FrameLayout.LayoutParams leftMenuLayoutParams;
     int leftMenuWidth;
     static boolean isLeftExpanded;
+    Button menuErase;
+    Button menuSave;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +54,7 @@ public class Dessin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dessin);
 
-        LinearLayout inflateView=(LinearLayout)findViewById(R.id.InflateLayout);
+        inflateView=(LinearLayout)findViewById(R.id.InflateLayout);
 
         //그림 그릴 뷰를 가져온다.
         drawingView=new DrawingView(this);
@@ -105,11 +109,21 @@ public class Dessin extends AppCompatActivity {
             //5. 메뉴
             menuBtn=(ImageButton)findViewById(R.id.menuBtn);
             menuBtn.setOnClickListener(this);
+
+            //6.왼쪽 메뉴 지우기
+            menuErase=(Button)findViewById(R.id.menu_erase);
+            menuErase.setOnClickListener(this);
+
+            //7.왼쪽 메뉴 저장
+            menuSave=(Button)findViewById(R.id.menu_save);
+            menuSave.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             switch (v.getId()){
+
+                //선 굵기 버튼
                 case R.id.brushBtn:
                     BrushDialog.listener=new OnPenSelectedListener() {
                         @Override
@@ -129,6 +143,8 @@ public class Dessin extends AppCompatActivity {
 
                     startActivity(new Intent(getApplicationContext(),BrushDialog.class));
                     break;
+
+                //지우개 버튼
                 case R.id.eraseBtn:
                     erasecnt+=1;
                     if(erasecnt%2==1) {
@@ -153,6 +169,8 @@ public class Dessin extends AppCompatActivity {
                         colorBtn.setEnabled(true);
                     }
                     break;
+
+                //색상 버튼
                 case R.id.colorBtn:
                     ColorDialog.listener=new OnColorSelectedListener() {
                         @Override
@@ -164,11 +182,22 @@ public class Dessin extends AppCompatActivity {
 
                     startActivity(new Intent(getApplicationContext(),ColorDialog.class));
                     break;
+
+                //설정 버튼
                 case R.id.toolBtn:
                     startActivity(new Intent(getApplicationContext(), SettingActivity.class));
                     break;
+
+                //메뉴 버튼 클릭시
                 case R.id.menuBtn:
                     menuLeftSlideAnimatonToggle();
+                    break;
+
+                //왼쪽 메뉴 지우개
+                case R.id.menu_erase:
+                    drawingView.setClear();
+                    break;
+                default:
                     break;
             }
         }

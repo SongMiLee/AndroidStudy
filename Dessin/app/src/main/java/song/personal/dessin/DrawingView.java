@@ -1,9 +1,13 @@
 package song.personal.dessin;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -15,6 +19,9 @@ import java.util.ArrayList;
 public class DrawingView extends View {
     Paint mpaint;
     ArrayList<Point> pointList;
+    Canvas mcanvas;
+    Bitmap mbitmap;
+    boolean clear=false;
 
     int mWidth=10;
     int mColor=Color.BLACK;
@@ -29,8 +36,16 @@ public class DrawingView extends View {
        //페인트 초기화
        mpaint=new Paint();
        mpaint.setColor(Color.BLACK);
+       mpaint.setAntiAlias(true);
        mpaint.setStrokeWidth(10);
+
+       mbitmap=Bitmap.createBitmap(320, 480, Bitmap.Config.ARGB_8888);
+
    }
+
+    public void setClear(){
+        clear=true;
+    }
 
     //선의 색 반환하기
     public int getColor()    {        return mpaint.getColor();    }
@@ -98,18 +113,17 @@ public class DrawingView extends View {
     //화면을 그려주는 함수
     @Override
     protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        canvas.drawColor(Color.WHITE);
-        for(int i=0;i<pointList.size();i++)
-        {
+       super.onDraw(canvas);
+
+        for (int i = 0; i < pointList.size(); i++) {
             //펜의 값과 색을 세팅
             mpaint.setStrokeWidth(pointList.get(i).strokeWidth);
             mpaint.setColor(pointList.get(i).strokeColor);
 
             //그리는 중일 때
-            if(pointList.get(i).isDrawing)
+            if (pointList.get(i).isDrawing)
                 canvas.drawLine(pointList.get(i).x, pointList.get(i).y, pointList.get(i - 1).x, pointList.get(i - 1).y, mpaint);
-            //찍었을 때
+                //찍었을 때
             else
                 canvas.drawPoint(pointList.get(i).x, pointList.get(i).y, mpaint);
         }

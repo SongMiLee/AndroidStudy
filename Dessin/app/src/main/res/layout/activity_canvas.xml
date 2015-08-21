@@ -4,7 +4,7 @@
 
     <TableRow>
         <ImageButton
-            android:layout_width="150px"
+            android:layout_width="match_parent"
             android:layout_height="100px"
             android:src="@drawable/menu_btn"
             android:layout_weight="1"
@@ -13,7 +13,7 @@
             android:id="@+id/menuBtn" />
 
         <ImageButton
-            android:layout_width="150px"
+            android:layout_width="match_parent"
             android:layout_height="100px"
             android:src="@drawable/brush_btn"
             android:layout_weight="1"
@@ -22,7 +22,7 @@
             android:id="@+id/brushBtn" />
 
         <ImageButton
-            android:layout_width="150px"
+            android:layout_width="match_parent"
             android:layout_height="100px"
             android:src="@drawable/eraser_btn"
             android:layout_weight="1"
@@ -30,7 +30,7 @@
             android:scaleType="fitXY"
             android:id="@+id/eraseBtn" />
         <ImageButton
-            android:layout_width="150px"
+            android:layout_width="match_parent"
             android:layout_height="100px"
             android:src="@drawable/color_btn"
             android:layout_weight="1"
@@ -38,14 +38,13 @@
             android:scaleType="fitXY"
             android:id="@+id/colorBtn" />
         <ImageButton
-            android:layout_width="150px"
+            android:layout_width="match_parent"
             android:layout_height="100px"
             android:src="@drawable/tools_btn"
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
-            android:id="@+id/toolBtn"
-            />
+            android:id="@+id/toolBtn" />
 
     </TableRow>
 
