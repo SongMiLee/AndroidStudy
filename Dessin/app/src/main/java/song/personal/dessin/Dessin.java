@@ -69,101 +69,10 @@ public class Dessin extends AppCompatActivity {
         new Thread(init).start();
     }
 
-    //1. 브러시
-    private View.OnClickListener brushListener=new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-           // drawingView.callBrushDialog();
-
-            Log.d("Call Brush Dialog", "now call Brush Dialog");
-            BrushDialog.listener=new OnPenSelectedListener() {
-                @Override
-                public void onPenSelected(int pen) {
-                    int color=drawingView.getColor();
-                    width=pen;
-                    Log.i("pen Size : ", width+"");
-
-                    if(color==Color.WHITE) {
-                        drawingView.setColor(Color.BLACK);
-                        drawingView.setStroke(width);
-                    }
-                    else
-                        drawingView.setStroke(width);
-                }
-            };
-
-            Intent intent=new Intent(getApplicationContext(),BrushDialog.class);
-            startActivity(intent);
-        }
-    };
-
-    //2. 지우개
-    private View.OnClickListener eraseListener=new View.OnClickListener(){
-        @Override
-        public void onClick(View v) {
-            erasecnt+=1;
-            if(erasecnt%2==1) {
-                //이전의 상태 저장
-                color=drawingView.getColor();
-                width=(int)drawingView.getStroke();
-
-                //지우개 적용
-                drawingView.setErase();
-
-                //색, 굵기 버튼 비활성화
-                brushBtn.setEnabled(false);
-                colorBtn.setEnabled(false);
-            }
-            else
-            {
-                drawingView.setColor(color);
-                drawingView.setStroke(width);
-
-                //색, 굵기 버튼 활성화
-                brushBtn.setEnabled(true);
-                colorBtn.setEnabled(true);
-            }
-        }
-    };
-
-    //3. 색
-    private View.OnClickListener colorListener=new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-
-            ColorDialog.listener=new OnColorSelectedListener() {
-                @Override
-                public void onColorChanged(int pen) {
-                    color=pen;
-                    drawingView.setColor(color);
-                }
-            };
-
-            Intent i=new Intent(getApplicationContext(),ColorDialog.class);
-            startActivity(i);
-        }
-    };
-
-    //4.도구
-    private View.OnClickListener toolListener=new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            startActivity(new Intent(getApplicationContext(), SettingActivity.class));
-        }
-    };
-
-    //5.메뉴
-    private View.OnClickListener menuListener=new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            menuLeftSlideAnimatonToggle();
-        }
-    };
-
     /**
      * 초기화 작업 처리
      * */
-    class InitializationRunnable implements Runnable{
+    class InitializationRunnable implements Runnable, View.OnClickListener {
 
         @Override
         public void run() {
@@ -179,23 +88,89 @@ public class Dessin extends AppCompatActivity {
 
             //1. 브러시 함수
             brushBtn=(ImageButton)findViewById(R.id.brushBtn);
-            brushBtn.setOnClickListener(brushListener);
+            brushBtn.setOnClickListener(this);
 
             //2. 지우개 함수
             eraseBtn=(ImageButton)findViewById(R.id.eraseBtn);
-            eraseBtn.setOnClickListener(eraseListener);
+            eraseBtn.setOnClickListener(this);
 
             //3.칼라
             colorBtn=(ImageButton)findViewById(R.id.colorBtn);
-            colorBtn.setOnClickListener(colorListener);
+            colorBtn.setOnClickListener(this);
 
             //4.기타
             toolBtn=(ImageButton)findViewById(R.id.toolBtn);
-            toolBtn.setOnClickListener(toolListener);
+            toolBtn.setOnClickListener(this);
 
             //5. 메뉴
             menuBtn=(ImageButton)findViewById(R.id.menuBtn);
-            menuBtn.setOnClickListener(menuListener);
+            menuBtn.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.brushBtn:
+                    BrushDialog.listener=new OnPenSelectedListener() {
+                        @Override
+                        public void onPenSelected(int pen) {
+                            int color=drawingView.getColor();
+                            width=pen;
+                            Log.i("pen Size : ", width+"");
+
+                            if(color==Color.WHITE) {
+                                drawingView.setColor(Color.BLACK);
+                                drawingView.setStroke(width);
+                            }
+                            else
+                                drawingView.setStroke(width);
+                        }
+                    };
+
+                    startActivity(new Intent(getApplicationContext(),BrushDialog.class));
+                    break;
+                case R.id.eraseBtn:
+                    erasecnt+=1;
+                    if(erasecnt%2==1) {
+                        //이전의 상태 저장
+                        color=drawingView.getColor();
+                        width=(int)drawingView.getStroke();
+
+                        //지우개 적용
+                        drawingView.setErase();
+
+                        //색, 굵기 버튼 비활성화
+                        brushBtn.setEnabled(false);
+                        colorBtn.setEnabled(false);
+                    }
+                    else
+                    {
+                        drawingView.setColor(color);
+                        drawingView.setStroke(width);
+
+                        //색, 굵기 버튼 활성화
+                        brushBtn.setEnabled(true);
+                        colorBtn.setEnabled(true);
+                    }
+                    break;
+                case R.id.colorBtn:
+                    ColorDialog.listener=new OnColorSelectedListener() {
+                        @Override
+                        public void onColorChanged(int pen) {
+                            color=pen;
+                            drawingView.setColor(color);
+                        }
+                    };
+
+                    startActivity(new Intent(getApplicationContext(),ColorDialog.class));
+                    break;
+                case R.id.toolBtn:
+                    startActivity(new Intent(getApplicationContext(), SettingActivity.class));
+                    break;
+                case R.id.menuBtn:
+                    menuLeftSlideAnimatonToggle();
+                    break;
+            }
         }
     }
 

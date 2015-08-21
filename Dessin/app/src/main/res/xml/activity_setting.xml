@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:key="setting_activity_account"
+        android:title="어플리케이션 정보" >
+        <Preference
+            android:key="setting_name"
+            android:title="Name"
+            android:summary="Dessin"
+            android:selectable="false"
+            />
+        <Preference
+            android:key="setting_version"
+            android:title="Version"
+            android:summary="v 0.1"
+            android:selectable="false"
+            />
+    </PreferenceCategory>
+    <PreferenceCategory
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:key="setting_activity_share"
+        android:title="공유하기">
+
+        <Preference
+            android:key="setting_facebook"
+            android:title="페이스북"
+            android:selectable="true"
+            />
+        <Preference
+            android:key="setting_twitter"
+            android:title="트위터"
+            android:selectable="true"
+            />
+        <Preference
+            android:key="setting_instagram"
+            android:title="인스타그램"
+            android:selectable="true"
+            />
+    </PreferenceCategory>
+
+</PreferenceScreen>
