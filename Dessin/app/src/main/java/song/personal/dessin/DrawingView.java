@@ -5,8 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,9 +17,7 @@ import java.util.ArrayList;
 public class DrawingView extends View {
     Paint mpaint;
     ArrayList<Point> pointList;
-    Canvas mcanvas;
     Bitmap mbitmap;
-    boolean clear=false;
 
     int mWidth=10;
     int mColor=Color.BLACK;
@@ -43,10 +39,6 @@ public class DrawingView extends View {
 
    }
 
-    public void setClear(){
-        clear=true;
-    }
-
     //선의 색 반환하기
     public int getColor()    {        return mpaint.getColor();    }
 
@@ -65,16 +57,6 @@ public class DrawingView extends View {
     {
         mpaint.setStrokeWidth(width);
         mWidth=width;
-    }
-
-    //지우개 설정
-    public void setErase()
-    {
-        mpaint.setColor(Color.WHITE);
-        mColor=Color.WHITE;
-
-        mpaint.setStrokeWidth(15);
-        mWidth=15;
     }
 
     //터치 이벤트 함수
@@ -114,6 +96,7 @@ public class DrawingView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
        super.onDraw(canvas);
+        canvas.drawColor(Color.WHITE);
 
         for (int i = 0; i < pointList.size(); i++) {
             //펜의 값과 색을 세팅

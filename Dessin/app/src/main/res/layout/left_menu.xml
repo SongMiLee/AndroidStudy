@@ -17,7 +17,7 @@
             android:textColor="@color/click_words"
             android:textColorHighlight="@color/click_words"
             android:textColorLink="@color/click_words"
-            android:text="화면 지우기"
+            android:text="지우개"
             />
         <ImageView
             android:layout_width="match_parent"
@@ -26,7 +26,7 @@
             />
 
         <Button
-            android:id="@+id/menu_save"
+            android:id="@+id/menu_setting"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
@@ -35,7 +35,7 @@
             android:textColor="@color/click_words"
             android:textColorHighlight="@color/click_words"
             android:textColorLink="@color/click_words"
-            android:text="저장하기"
+            android:text="설정"
             android:background="#00000000"
             />
         <ImageView

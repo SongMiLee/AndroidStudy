@@ -40,11 +40,19 @@
         <ImageButton
             android:layout_width="match_parent"
             android:layout_height="100px"
-            android:src="@drawable/tools_btn"
+            android:src="@drawable/save_btn"
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
-            android:id="@+id/toolBtn" />
+            android:id="@+id/saveBtn" />
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="100px"
+            android:src="@drawable/load_btn"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:id="@+id/loadBtn" />
 
     </TableRow>
 

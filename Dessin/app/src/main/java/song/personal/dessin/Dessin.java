@@ -2,12 +2,15 @@ package song.personal.dessin;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +20,19 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileOutputStream;
 
 public class Dessin extends AppCompatActivity {
     //액션바 메뉴
     ImageButton brushBtn;
     ImageButton eraseBtn;
-    ImageButton toolBtn;
+    ImageButton saveBtn;
     ImageButton colorBtn;
     ImageButton menuBtn;
+    ImageButton loadBtn;
 
     //선의 기본 설정
     int width=10;
@@ -42,7 +50,7 @@ public class Dessin extends AppCompatActivity {
     int leftMenuWidth;
     static boolean isLeftExpanded;
     Button menuErase;
-    Button menuSave;
+    Button menuSetting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,21 +108,25 @@ public class Dessin extends AppCompatActivity {
             colorBtn=(ImageButton)findViewById(R.id.colorBtn);
             colorBtn.setOnClickListener(this);
 
-            //4.기타
-            toolBtn=(ImageButton)findViewById(R.id.toolBtn);
-            toolBtn.setOnClickListener(this);
+            //4.저장 메뉴
+            saveBtn =(ImageButton)findViewById(R.id.saveBtn);
+            saveBtn.setOnClickListener(this);
 
             //5. 메뉴
             menuBtn=(ImageButton)findViewById(R.id.menuBtn);
             menuBtn.setOnClickListener(this);
 
-            //6.왼쪽 메뉴 지우기
+            //열기 버튼
+            loadBtn=(ImageButton)findViewById(R.id.loadBtn);
+            loadBtn.setOnClickListener(this);
+
+            //.왼쪽 메뉴 지우기
             menuErase=(Button)findViewById(R.id.menu_erase);
             menuErase.setOnClickListener(this);
 
-            //7.왼쪽 메뉴 저장
-            menuSave=(Button)findViewById(R.id.menu_save);
-            menuSave.setOnClickListener(this);
+            //.왼쪽 메뉴 설정
+            menuSetting =(Button)findViewById(R.id.menu_setting);
+            menuSetting.setOnClickListener(this);
         }
 
         @Override
@@ -144,6 +156,7 @@ public class Dessin extends AppCompatActivity {
 
                 //지우개 버튼
                 case R.id.eraseBtn:
+                case R.id.menu_erase:
                     EraseDialog.listener=new OnEraserSelectedListener() {
                         @Override
                         public void onEraserSelected(int erase) {
@@ -171,9 +184,14 @@ public class Dessin extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(),ColorDialog.class));
                     break;
 
-                //설정 버튼
-                case R.id.toolBtn:
-                    startActivity(new Intent(getApplicationContext(), SettingActivity.class));
+                //저장 버튼
+                case R.id.saveBtn:
+                    savePicture();
+                    break;
+
+                //열기 버튼
+                case R.id.loadBtn:
+                    loadPicture();
                     break;
 
                 //메뉴 버튼 클릭시
@@ -181,9 +199,8 @@ public class Dessin extends AppCompatActivity {
                     menuLeftSlideAnimatonToggle();
                     break;
 
-                //왼쪽 메뉴 지우개
-                case R.id.menu_erase:
-                    drawingView.setClear();
+                case R.id.menu_setting:
+                    startActivity(new Intent(getApplicationContext(), SettingActivity.class));
                     break;
                 default:
                     break;
@@ -274,4 +291,42 @@ public class Dessin extends AppCompatActivity {
         }
     }
 
+    private void loadPicture(){
+        String dirPath=Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/Dessin";
+        File dir=new File(dirPath);
+        Bitmap bitmap= BitmapFactory.decodeFile(dir + "/img.png");
+        Bitmap copyBit=bitmap.copy(Bitmap.Config.ARGB_8888,true);
+        drawingView.draw(new Canvas(copyBit));
+        Toast.makeText(this,"이미지를 불러왔습니다.",Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 뷰의 이미지를 저장
+     * 캐쉬를 허용한 뒤 뷰를 스크린 샷을 가져와 png 파일로 저장
+     * */
+    private void savePicture(){
+        drawingView.setDrawingCacheEnabled(true);//캐쉬 허용
+        Bitmap screenshot=Bitmap.createBitmap(drawingView.getDrawingCache());
+        drawingView.setDrawingCacheEnabled(false);//캐쉬 닫기
+
+        //sd 카드에 접근하여 저장
+        String dirPath= Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/Dessin";
+        File dir= new File(dirPath);
+        Log.d("file : ",dir.toString());
+
+        //폴더가 없으면 새로 만듦
+        if(!dir.exists())
+            dir.mkdirs();
+        FileOutputStream fileout;
+
+        try{
+            fileout=new FileOutputStream(new File(dir, "img"+System.currentTimeMillis()+".png"));
+            screenshot.compress(Bitmap.CompressFormat.PNG,100,fileout);
+            fileout.close();
+            Toast.makeText(this,"저장 되었습니다.",Toast.LENGTH_SHORT).show();
+        }catch(Exception e){
+            e.printStackTrace();
+            Toast.makeText(this,"저장 하지 못하였습니다.",Toast.LENGTH_SHORT).show();
+        }
+    }
 }
