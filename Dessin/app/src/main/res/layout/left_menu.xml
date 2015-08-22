@@ -11,6 +11,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
+            android:padding="10dp"
             android:textSize="12pt"
             android:background="#00000000"
             android:textColor="@color/click_words"

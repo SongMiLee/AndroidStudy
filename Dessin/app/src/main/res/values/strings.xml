@@ -9,4 +9,5 @@
     <string name="title_activity_brush">Brush</string>
     <string name="title_activity_color_dialog">ColorDialog</string>
     <string name="title_activity_setting">SettingActivity</string>
+    <string name="title_activity_erase_dialog">EraseDialog</string>
 </resources>

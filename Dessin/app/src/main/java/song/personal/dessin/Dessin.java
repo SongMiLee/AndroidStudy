@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,9 +33,6 @@ public class Dessin extends AppCompatActivity {
     //그림 그릴 뷰
     LinearLayout inflateView;
     DrawingView drawingView;
-
-    //색, 선 버튼 비활성화를 위한 카운트
-    static int erasecnt;
 
     //슬라이드 메뉴
     DisplayMetrics metrics;
@@ -128,16 +126,16 @@ public class Dessin extends AppCompatActivity {
                     BrushDialog.listener=new OnPenSelectedListener() {
                         @Override
                         public void onPenSelected(int pen) {
-                            int color=drawingView.getColor();
                             width=pen;
-                            Log.i("pen Size : ", width+"");
 
-                            if(color==Color.WHITE) {
+                            if(color!=Color.WHITE) {
+                                drawingView.setColor(color);
+                                drawingView.setStroke(width);
+                            }
+                            else {
                                 drawingView.setColor(Color.BLACK);
                                 drawingView.setStroke(width);
                             }
-                            else
-                                drawingView.setStroke(width);
                         }
                     };
 
@@ -146,28 +144,18 @@ public class Dessin extends AppCompatActivity {
 
                 //지우개 버튼
                 case R.id.eraseBtn:
-                    erasecnt+=1;
-                    if(erasecnt%2==1) {
-                        //이전의 상태 저장
-                        color=drawingView.getColor();
-                        width=(int)drawingView.getStroke();
+                    EraseDialog.listener=new OnEraserSelectedListener() {
+                        @Override
+                        public void onEraserSelected(int erase) {
+                            if(drawingView.getColor()!=Color.WHITE){ color=drawingView.getColor(); width=(int)drawingView.getStroke();}
 
-                        //지우개 적용
-                        drawingView.setErase();
+                            width=erase;
+                            drawingView.setColor(Color.WHITE);
+                            drawingView.setStroke(width);
 
-                        //색, 굵기 버튼 비활성화
-                        brushBtn.setEnabled(false);
-                        colorBtn.setEnabled(false);
-                    }
-                    else
-                    {
-                        drawingView.setColor(color);
-                        drawingView.setStroke(width);
-
-                        //색, 굵기 버튼 활성화
-                        brushBtn.setEnabled(true);
-                        colorBtn.setEnabled(true);
-                    }
+                        }
+                    };
+                    startActivity(new Intent(getApplicationContext(),EraseDialog.class));
                     break;
 
                 //색상 버튼
@@ -204,7 +192,7 @@ public class Dessin extends AppCompatActivity {
     }
 
     /**
-     * sliding Menu 관련한 변수들을ㄹ 초기화 해준다.
+     * sliding Menu 관련한 변수들을 초기화 해준다.
      * */
     private void initSlideMenu() {
         //left menu 가로를 초기화
