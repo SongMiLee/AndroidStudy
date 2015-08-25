@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -303,14 +304,6 @@ public class Dessin extends AppCompatActivity {
     }
 
     private void loadPicture(){
-        /*
-        String dirPath=Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/Dessin";
-        File dir=new File(dirPath);
-        Bitmap bitmap= BitmapFactory.decodeFile(dir + "/img.png");
-        Bitmap copyBit=bitmap.copy(Bitmap.Config.ARGB_8888,true);
-        drawingView.draw(new Canvas(copyBit));
-        Toast.makeText(this,"이미지를 불러왔습니다.",Toast.LENGTH_SHORT).show();*/
-
         Intent i=new Intent();
         //Gallery 불러오기
         i.setType("image/*");
@@ -335,9 +328,9 @@ public class Dessin extends AppCompatActivity {
      * 캐쉬를 허용한 뒤 뷰를 스크린 샷을 가져와 png 파일로 저장
      * */
     private void savePicture(){
-        drawingView.setDrawingCacheEnabled(true);//캐쉬 허용
-        Bitmap screenshot=Bitmap.createBitmap(drawingView.getDrawingCache());
-        drawingView.setDrawingCacheEnabled(false);//캐쉬 닫기
+        mainLayout.setDrawingCacheEnabled(true);//캐시를 허용
+        Bitmap screenshot=Bitmap.createBitmap(mainLayout.getDrawingCache());//화면 캡쳐
+        mainLayout.setDrawingCacheEnabled(false);//캐시 비허용
 
         //sd 카드에 접근하여 저장
         String dirPath= Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/Dessin";
@@ -350,8 +343,8 @@ public class Dessin extends AppCompatActivity {
 
         FileOutputStream fileout=null;
         try{
-            fileout=new FileOutputStream(new File(dir, "img_"+System.currentTimeMillis()+".png"));
-            screenshot.compress(Bitmap.CompressFormat.PNG,100,fileout);
+            fileout=new FileOutputStream(new File(dir, "img_"+System.currentTimeMillis()+".jpeg"));
+            screenshot.compress(Bitmap.CompressFormat.JPEG,100,fileout);
             fileout.close();
             Toast.makeText(this,"저장 되었습니다.",Toast.LENGTH_SHORT).show();
         }catch(Exception e){
@@ -376,11 +369,14 @@ public class Dessin extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode==GET_PIC_URI){
-            Bundle extra=data.getExtras();
-            if(extra!=null){
-                Bitmap photo=extra.getParcelable("data");
-                imageView.setImageBitmap(photo);
-            }
+            try {
+                Bundle extra = data.getExtras();
+                if (extra != null) {
+                    Bitmap photo = extra.getParcelable("data");
+                    imageView.setImageBitmap(photo);
+                    Toast.makeText(this,"이미지를 불러왔습니다.",Toast.LENGTH_SHORT).show();
+                }
+            }catch (Exception e){ e.printStackTrace();}
         }
     }
 }
