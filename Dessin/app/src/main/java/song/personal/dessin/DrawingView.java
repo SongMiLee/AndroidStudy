@@ -17,7 +17,6 @@ import java.util.ArrayList;
 public class DrawingView extends View {
     Paint mpaint;
     ArrayList<Point> pointList;
-    Bitmap mbitmap;
 
     int mWidth=10;
     int mColor=Color.BLACK;
@@ -34,8 +33,6 @@ public class DrawingView extends View {
        mpaint.setColor(Color.BLACK);
        mpaint.setAntiAlias(true);
        mpaint.setStrokeWidth(10);
-
-       mbitmap=Bitmap.createBitmap(320, 480, Bitmap.Config.ARGB_8888);
 
    }
 
@@ -96,7 +93,7 @@ public class DrawingView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
        super.onDraw(canvas);
-        canvas.drawColor(Color.WHITE);
+       canvas.drawColor(Color.TRANSPARENT);
 
         for (int i = 0; i < pointList.size(); i++) {
             //펜의 값과 색을 세팅

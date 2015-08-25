@@ -1,12 +1,15 @@
 package song.personal.dessin;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -19,6 +22,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -26,6 +30,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 public class Dessin extends AppCompatActivity {
+    static int GET_PIC_URI=200;
     //액션바 메뉴
     ImageButton brushBtn;
     ImageButton eraseBtn;
@@ -41,6 +46,7 @@ public class Dessin extends AppCompatActivity {
     //그림 그릴 뷰
     LinearLayout inflateView;
     DrawingView drawingView;
+    ImageView imageView;
 
     //슬라이드 메뉴
     DisplayMetrics metrics;
@@ -51,6 +57,8 @@ public class Dessin extends AppCompatActivity {
     static boolean isLeftExpanded;
     Button menuErase;
     Button menuSetting;
+
+    Uri uri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +73,9 @@ public class Dessin extends AppCompatActivity {
         //그림 그릴 뷰를 가져온다.
         drawingView=new DrawingView(this);
         inflateView.addView(drawingView);
+        inflateView.bringToFront();
+
+        imageView=(ImageView)findViewById(R.id.imageView);
 
         //시간이 걸리는 작업을 처리한다.
         initialize();
@@ -292,12 +303,31 @@ public class Dessin extends AppCompatActivity {
     }
 
     private void loadPicture(){
+        /*
         String dirPath=Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/Dessin";
         File dir=new File(dirPath);
         Bitmap bitmap= BitmapFactory.decodeFile(dir + "/img.png");
         Bitmap copyBit=bitmap.copy(Bitmap.Config.ARGB_8888,true);
         drawingView.draw(new Canvas(copyBit));
-        Toast.makeText(this,"이미지를 불러왔습니다.",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,"이미지를 불러왔습니다.",Toast.LENGTH_SHORT).show();*/
+
+        Intent i=new Intent();
+        //Gallery 불러오기
+        i.setType("image/*");
+        i.setAction(Intent.ACTION_GET_CONTENT);
+
+        //잘라내기
+        i.putExtra("crop","true");
+        i.putExtra("aspectX",0);
+        i.putExtra("aspectY",0);
+        i.putExtra("outputX",200);
+        i.putExtra("outputY", 150);
+
+        try{
+            i.putExtra("return-data",true);
+            startActivityForResult(Intent.createChooser(i,"이미지 불러오기"),GET_PIC_URI);
+        }catch (Exception e){e.printStackTrace();}
+
     }
 
     /**
@@ -317,16 +347,40 @@ public class Dessin extends AppCompatActivity {
         //폴더가 없으면 새로 만듦
         if(!dir.exists())
             dir.mkdirs();
-        FileOutputStream fileout;
 
+        FileOutputStream fileout=null;
         try{
-            fileout=new FileOutputStream(new File(dir, "img"+System.currentTimeMillis()+".png"));
+            fileout=new FileOutputStream(new File(dir, "img_"+System.currentTimeMillis()+".png"));
             screenshot.compress(Bitmap.CompressFormat.PNG,100,fileout);
             fileout.close();
             Toast.makeText(this,"저장 되었습니다.",Toast.LENGTH_SHORT).show();
         }catch(Exception e){
             e.printStackTrace();
             Toast.makeText(this,"저장 하지 못하였습니다.",Toast.LENGTH_SHORT).show();
+        }
+        finally {
+            if(fileout!=null){
+                try{
+                    fileout.close();
+                }catch (Exception e){ e.printStackTrace();}
+            }
+        }
+    }
+
+    /**
+     * 함수 오버라이딩
+     * 이미지 불러왔을때 처리
+     * */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode==GET_PIC_URI){
+            Bundle extra=data.getExtras();
+            if(extra!=null){
+                Bitmap photo=extra.getParcelable("data");
+                imageView.setImageBitmap(photo);
+            }
         }
     }
 }
