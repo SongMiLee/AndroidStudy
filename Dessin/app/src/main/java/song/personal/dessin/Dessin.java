@@ -1,16 +1,10 @@
 package song.personal.dessin;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
-import android.net.Uri;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -56,10 +50,8 @@ public class Dessin extends AppCompatActivity {
     FrameLayout.LayoutParams leftMenuLayoutParams;
     int leftMenuWidth;
     static boolean isLeftExpanded;
-    Button menuErase;
+    Button menuBackground;
     Button menuSetting;
-
-    Uri uri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,8 +125,8 @@ public class Dessin extends AppCompatActivity {
             loadBtn.setOnClickListener(this);
 
             //.왼쪽 메뉴 지우기
-            menuErase=(Button)findViewById(R.id.menu_erase);
-            menuErase.setOnClickListener(this);
+            menuBackground =(Button)findViewById(R.id.menu_background);
+            menuBackground.setOnClickListener(this);
 
             //.왼쪽 메뉴 설정
             menuSetting =(Button)findViewById(R.id.menu_setting);
@@ -168,7 +160,6 @@ public class Dessin extends AppCompatActivity {
 
                 //지우개 버튼
                 case R.id.eraseBtn:
-                case R.id.menu_erase:
                     EraseDialog.listener=new OnEraserSelectedListener() {
                         @Override
                         public void onEraserSelected(int erase) {
@@ -211,6 +202,17 @@ public class Dessin extends AppCompatActivity {
                     menuLeftSlideAnimatonToggle();
                     break;
 
+                case R.id.menu_background:
+                    ColorDialog.listener=new OnColorSelectedListener() {
+                        @Override
+                        public void onColorChanged(int i) {
+                            imageView.setImageResource(android.R.color.transparent);
+                            imageView.setBackgroundColor(i);
+                        }
+                    };
+                    startActivity(new Intent(getApplicationContext(), ColorDialog.class));
+                    menuLeftSlideAnimatonToggle();
+                    break;
                 case R.id.menu_setting:
                     startActivity(new Intent(getApplicationContext(), SettingActivity.class));
                     break;
@@ -325,7 +327,7 @@ public class Dessin extends AppCompatActivity {
 
     /**
      * 뷰의 이미지를 저장
-     * 캐쉬를 허용한 뒤 뷰를 스크린 샷을 가져와 png 파일로 저장
+     * 캐쉬를 허용한 뒤 뷰를 스크린 샷을 가져와 jpeg 파일로 저장
      * */
     private void savePicture(){
         mainLayout.setDrawingCacheEnabled(true);//캐시를 허용
