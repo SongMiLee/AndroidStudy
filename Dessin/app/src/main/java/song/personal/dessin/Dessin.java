@@ -20,12 +20,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import java.io.File;
 import java.io.FileOutputStream;
 
 public class Dessin extends AppCompatActivity {
-    static int GET_PIC_URI=200;
+    public static int GET_PIC_URI=200;
+
     //액션바 메뉴
     ImageButton brushBtn;
     ImageButton eraseBtn;
@@ -37,10 +37,11 @@ public class Dessin extends AppCompatActivity {
     //선의 기본 설정
     int width=10;
     int color=Color.BLACK;
+    static int cnt=0;
 
     //그림 그릴 뷰
     LinearLayout inflateView;
-    DrawingView drawingView;
+    public static DrawingView drawingView;
     ImageView imageView;
 
     //슬라이드 메뉴
@@ -160,17 +161,10 @@ public class Dessin extends AppCompatActivity {
 
                 //지우개 버튼
                 case R.id.eraseBtn:
-                    EraseDialog.listener=new OnEraserSelectedListener() {
-                        @Override
-                        public void onEraserSelected(int erase) {
-                            if(drawingView.getColor()!=Color.WHITE){ color=drawingView.getColor(); width=(int)drawingView.getStroke();}
-
-                            width=erase;
-                            drawingView.setColor(Color.WHITE);
-                            drawingView.setStroke(width);
-
-                        }
-                    };
+                    if(drawingView.getColor()!=Color.WHITE){
+                        color=drawingView.getColor();
+                        width=(int)drawingView.getStroke();
+                    }
                     startActivity(new Intent(getApplicationContext(),EraseDialog.class));
                     break;
 
