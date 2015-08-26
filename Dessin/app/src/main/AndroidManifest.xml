@@ -5,12 +5,14 @@
     <!-- 안드로이드에 권한 추가 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
         <activity
             android:name=".Dessin"
             android:configChanges="orientation|screenSize"
@@ -38,15 +40,18 @@
             android:label="@string/title_activity_color_dialog"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
+        <!-- 설정 액티비티-->
         <activity
             android:name=".SettingActivity"
             android:label="@string/title_activity_setting" >
         </activity>
+        <!--지우개 다이얼로그-->
         <activity
             android:name=".EraseDialog"
             android:label="@string/title_activity_erase_dialog"
             android:theme="@android:style/Theme.Dialog">
         </activity>
+
     </application>
 
 </manifest>

@@ -24,18 +24,13 @@
         android:title="공유하기">
 
         <Preference
-            android:key="setting_facebook"
-            android:title="페이스북"
+            android:key="setting_saveview"
+            android:title="저장한 파일 공유하기"
             android:selectable="true"
             />
         <Preference
-            android:key="setting_twitter"
-            android:title="트위터"
-            android:selectable="true"
-            />
-        <Preference
-            android:key="setting_instagram"
-            android:title="인스타그램"
+            android:key="setting_curview"
+            android:title="현재 화면 공유하기"
             android:selectable="true"
             />
     </PreferenceCategory>
