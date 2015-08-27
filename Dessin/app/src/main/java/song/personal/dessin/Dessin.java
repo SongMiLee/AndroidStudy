@@ -38,7 +38,6 @@ public class Dessin extends AppCompatActivity {
     //선의 기본 설정
     int width=10;
     int color=Color.BLACK;
-    static int cnt=0;
 
     //그림 그릴 뷰
     LinearLayout inflateView;
@@ -47,7 +46,7 @@ public class Dessin extends AppCompatActivity {
 
     //슬라이드 메뉴
     DisplayMetrics metrics;
-    LinearLayout mainLayout;
+    static LinearLayout mainLayout;
     LinearLayout menuLayout;
     FrameLayout.LayoutParams leftMenuLayoutParams;
     int leftMenuWidth;
@@ -210,6 +209,7 @@ public class Dessin extends AppCompatActivity {
                     break;
                 case R.id.menu_setting:
                     startActivity(new Intent(getApplicationContext(), SettingActivity.class));
+                    menuLeftSlideAnimatonToggle();//화면을 닫아준다.(닫지 않으면 현화면 캡쳐시 전부 캡쳐가 되지 않음)
                     break;
                 default:
                     break;
@@ -330,9 +330,8 @@ public class Dessin extends AppCompatActivity {
         mainLayout.setDrawingCacheEnabled(false);//캐시 비허용
 
         //sd 카드에 접근하여 저장
-        String dirPath= Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/Dessin";
+        String dirPath= Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/Dessin";//파일 경로
         File dir= new File(dirPath);
-        Log.d("file : ",dir.toString());
 
         //폴더가 없으면 새로 만듦
         if(!dir.exists())
@@ -340,9 +339,11 @@ public class Dessin extends AppCompatActivity {
 
         FileOutputStream fileout=null;
         try{
-            fileout=new FileOutputStream(new File(dir, "img_"+System.currentTimeMillis()+".jpeg"));
-            screenshot.compress(Bitmap.CompressFormat.JPEG,100,fileout);
+            //파일을 저장
+            fileout=new FileOutputStream(new File(dir, "img_"+System.currentTimeMillis()+".jpeg"));//시간을 기준으로 파일명을 지음.
+            screenshot.compress(Bitmap.CompressFormat.JPEG,100,fileout);//jpeg 이미지로 압축
             fileout.close();
+
             Toast.makeText(this,"저장 되었습니다.",Toast.LENGTH_SHORT).show();
         }catch(Exception e){
             e.printStackTrace();

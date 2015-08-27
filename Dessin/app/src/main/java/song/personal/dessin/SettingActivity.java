@@ -1,10 +1,17 @@
 package song.personal.dessin;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.util.Log;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileOutputStream;
 
 /**
  * Created by song on 2015-08-21.
@@ -38,11 +45,43 @@ public class SettingActivity extends PreferenceActivity implements Preference.On
 
             try{
                 i.putExtra("return-data",true);
-                startActivityForResult(Intent.createChooser(i,"이미지 불러오기"),200);
+                startActivityForResult(Intent.createChooser(i,"이미지 불러오기"),Dessin.GET_PIC_URI);
             }catch (Exception e){e.printStackTrace();}
 
         }else if(preference.getKey().equals("setting_curview")){
+            Dessin.mainLayout.setDrawingCacheEnabled(true);//캐시를 허용
+            Bitmap screenshot=Bitmap.createBitmap(Dessin.mainLayout.getDrawingCache());//화면 캡쳐
+            Dessin.mainLayout.setDrawingCacheEnabled(false);//캐시 비허용
 
+            //sd 카드에 접근하여 저장
+            String dirPath= Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/Dessin";
+            File dir= new File(dirPath);
+
+            //폴더가 없으면 새로 만듦
+            if(!dir.exists())
+                dir.mkdirs();
+
+            FileOutputStream fileout=null;
+            try{
+                File tmpfile=new File(dir, "img_"+System.currentTimeMillis()+".jpeg");
+                fileout=new FileOutputStream(tmpfile);
+                screenshot.compress(Bitmap.CompressFormat.JPEG, 100, fileout);
+                fileout.close();
+
+                Intent i=new Intent(Intent.ACTION_SEND);//전송 메소드 호출
+                i.setType("image/*");//공유할 타입
+
+                Uri tmpUri=Uri.fromFile(tmpfile);//파일 uri 반환
+                i.putExtra(Intent.EXTRA_STREAM,tmpUri);
+                startActivity(Intent.createChooser(i,"공유하기"));
+            }catch(Exception e){       e.printStackTrace();       }
+            finally {
+                if(fileout!=null){
+                    try{
+                        fileout.close();
+                    }catch (Exception e){ e.printStackTrace();}
+                }
+            }
         }
         return false;
     }
@@ -55,14 +94,13 @@ public class SettingActivity extends PreferenceActivity implements Preference.On
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode==200){
+        if(requestCode==Dessin.GET_PIC_URI){
             try {
                 Bundle extra = data.getExtras();
                 if (extra != null) {
                     Intent i=new Intent(Intent.ACTION_SEND);
                     i.setType("image/*");
 
-                    Log.d("URI : ", data.getDataString());
                     i.putExtra(Intent.EXTRA_STREAM, data.getData());
                     startActivity(Intent.createChooser(i, "공유"));
 
